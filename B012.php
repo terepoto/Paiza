@@ -2,11 +2,11 @@
 
 class B012{
 
-    protected $creditCards;
+    private array $creditCards;
 
-    public function setCredits()
+    public function setCredits(string $info)
     {
-        $countOfCredits = str_replace(array("\r\n","\r","\n"), '', fgets(STDIN));
+        $countOfCredits = str_replace(array("\r\n","\r","\n"), '', $info);
 
         for ($numberOfCredit = 1; $numberOfCredit <= $countOfCredits; $numberOfCredit++) {
             $creditCard = str_replace(array("\r\n","\r","\n"), '', fgets(STDIN));
@@ -14,8 +14,10 @@ class B012{
         }
     }
 
-    public function getX()
+    public function getX() : string
     {
+        $message = "";
+
         foreach ($this->creditCards as $creditCard) {
 
             $even = 0;
@@ -39,11 +41,12 @@ class B012{
             }
 
             $rightEndDigit = ($even + $odd) % 10 == 0 ? 0 : 10 - ($even + $odd) % 10;
-            echo $rightEndDigit . PHP_EOL;
+            $message .= $rightEndDigit . PHP_EOL;
         }
+        return $message;
     }
 
-    public function changeDigitToOne($number)
+    public function changeDigitToOne(int $number) : int
     {
         if ($number >= 10) {
             $number = floor($number / 10) + $number % 10;
@@ -54,5 +57,5 @@ class B012{
 }
 
 $B012 = new B012;
-$B012->setCredits();
-$B012->getX();
+$B012->setCredits(fgets(STDIN));
+echo $B012->getX();
