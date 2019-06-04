@@ -1,25 +1,22 @@
 <?php
-class B019
+class ResetImage
 {
-    private int $longOfSide;
+    private int $lengthOfSide;
 
     private int $percentage;
 
     private array $newImage;
 
-    public function __construct(string $info)
+    public function __construct(string $lengthOfSide, string $percentage)
     {
-        $info = str_replace(array("\r\n","\r","\n"), '', $info);
-        $arrInfo = explode(" ", $info);
-
-        $this->longOfSide = $arrInfo[0];
-        $this->percentage = $arrInfo[1];
+        $this->lengthOfSide = $lengthOfSide;
+        $this->percentage = $percentage;
     }
 
-    public function resetImage() : array
+    private function resetImage() : void
     {
-        $newLongOfSide = $this->longOfSide / $this->percentage;
-        for ($i = 1; $i <= $newLongOfSide; $i++) {
+        $purposeLength = $this->lengthOfSide / $this->percentage;
+        for ($i = 1; $i <= $purposeLength; $i++) {
             $block  = array();
 
             for ($line = 1; $line <= $this->percentage; $line++) {
@@ -30,23 +27,24 @@ class B019
                 }
             }
 
-            for ($group = 0; $group < $this->longOfSide / $this->percentage; $group++) {
+            for ($group = 0; $group < $this->lengthOfSide / $this->percentage; $group++) {
                 $this->newImage[] = floor(array_sum($block[$group]) / $this->percentage / $this->percentage);
             }
         }
-        return $this->newImage;
     }
 
     public function display() : string
     {
+        $this->resetImage();
+
         $message       = "";
         $lineCharge    = 1;
-        $newLongOfSide = $this->longOfSide / $this->percentage;
+        $purposeLength = $this->lengthOfSide / $this->percentage;
 
         foreach ($this->newImage as $group => $val) {
             $message .= $val;
 
-            if ($lineCharge == $newLongOfSide) {
+            if ($lineCharge == $purposeLength) {
                 $lineCharge = 1;
                 $message .= PHP_EOL;
             } else {
@@ -59,6 +57,8 @@ class B019
     }
 }
 
-$B019 = new B019(trim(fgets(STDIN)));
-$B019->resetImage();
-echo $B019->display();
+$info = str_replace(array("\r\n","\r","\n"), '', trim(fgets(STDIN)));
+$arrInfo = explode(" ", $info);
+
+$resetImage = new ResetImage($arrInfo[0], $arrInfo[1]);
+echo $resetImage->display();
