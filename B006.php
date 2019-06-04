@@ -13,7 +13,7 @@ class B006
 
     private int $targetDiameter;
 
-    public function __construct($info_arrow, $infotarget)
+    public function __construct(string $info_arrow, string $info_target)
     {
         $info    = str_replace(array("\r\n","\r","\n"), '', $info_arrow);
         $arrInfo = explode(" ", $info);
@@ -22,7 +22,7 @@ class B006
         $this->speed = $arrInfo[1];
         $this->theta = $arrInfo[2];
 
-        $info = str_replace(array("\r\n","\r","\n"), '', $infotarget);
+        $info = str_replace(array("\r\n","\r","\n"), '', $info_target);
         $arrInfo = explode(" ", $info);
         $this->distanceToTarget = $arrInfo[0]; //的までの距離x
         $this->targetHeight     = $arrInfo[1]; //高さy
