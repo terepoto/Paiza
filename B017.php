@@ -11,21 +11,22 @@ class B017
         $this->cards = str_split($cardGroup, 1);
     }
 
-    public function countCard()
+    public function countCard() : array
     {
         foreach ($this->cards as $number => $card) {
             switch ($card) {
                 case "*":
-                    $this->plusAllKindCardOne($this->cards, $this->countOfCard);
+                    $this->countOfCard = $this->plusAllKindCardOne($this->cards, $this->countOfCard);
                     break;
                 default:
                     $this->countOfCard[$card] = empty($this->countOfCard[$card]) ? 1 : $this->countOfCard[$card] + 1;
                     break;
             }
         }
+        return $this->countOfCard;
     }
 
-    public function getMeans()
+    public function getMeans() : string
     {
         $means = "";
         switch (max($this->countOfCard)) {
@@ -42,20 +43,23 @@ class B017
                 $means = "FourCard";
                 break;
         }
-        echo $means;
+        return $means;
     }
 
-    public function plusAllKindCardOne(array $cards, array & $countOfCard)
+    public function plusAllKindCardOne(array $cards, array $countOfCard) : array
     {
         $cards = array_unique($cards);
+
         foreach ($cards as $number => $card) {
             if ($card != "*") {
                 $countOfCard[$card] = !isset($countOfCard[$card]) ? 1 : $countOfCard[$card] + 1;
             }
         }
+
+        return $countOfCard;
     }
 }
 
 $B017 = new B017(fgets(STDIN));
 $B017->countCard();
-$B017->getMeans();
+echo $B017->getMeans();
