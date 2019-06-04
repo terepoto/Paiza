@@ -1,22 +1,22 @@
 <?php
 class B019
 {
-    protected $longOfSide;
+    private int $longOfSide;
 
-    protected $percentage;
+    private int $percentage;
 
-    protected $newImage;
+    private array $newImage;
 
-    public function __construct()
+    public function __construct(string $info)
     {
-        $info = str_replace(array("\r\n","\r","\n"), '', trim(fgets(STDIN)));
+        $info = str_replace(array("\r\n","\r","\n"), '', $info);
         $arrInfo = explode(" ", $info);
 
         $this->longOfSide = $arrInfo[0];
         $this->percentage = $arrInfo[1];
     }
 
-    public function resetImage()
+    public function resetImage() : array
     {
         $newLongOfSide = $this->longOfSide / $this->percentage;
         for ($i = 1; $i <= $newLongOfSide; $i++) {
@@ -34,27 +34,31 @@ class B019
                 $this->newImage[] = floor(array_sum($block[$group]) / $this->percentage / $this->percentage);
             }
         }
+        return $this->newImage;
     }
 
-    public function display()
+    public function display() : string
     {
+        $message       = "";
         $lineCharge    = 1;
         $newLongOfSide = $this->longOfSide / $this->percentage;
 
         foreach ($this->newImage as $group => $val) {
-            echo $val;
+            $message .= $val;
 
             if ($lineCharge == $newLongOfSide) {
                 $lineCharge = 1;
-                echo PHP_EOL;
+                $message .= PHP_EOL;
             } else {
                 $lineCharge++;
-                echo " ";
+                $message .= " ";
             }
         }
+
+        return $message;
     }
 }
 
-$B019 = new B019;
+$B019 = new B019(trim(fgets(STDIN)));
 $B019->resetImage();
-$B019->display();
+echo $B019->display();
