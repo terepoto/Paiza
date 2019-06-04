@@ -1,43 +1,42 @@
 <?php
+class B046
+{
+    private int $rounds;
 
-class B046{
+    private int $nowAround;
 
-    protected $rounds;
+    private string $nowDirection;
 
-    protected $nowAround;
+    private int $purposeAround;
 
-    protected $nowDirection;
+    private string $purposeDirection;
 
-    protected $purposeAround;
+    private float $distance;
 
-    protected $purposeDirection;
-
-    protected $distance;
-
-    public function __construct()
+    public function __construct($info)
     {
-        $this->rounds = str_replace(array("\r\n","\r","\n"), '', fgets(STDIN));
+        $this->rounds = str_replace(array("\r\n","\r","\n"), '', $info);
     }
 
-    public function setNowPositionInfo()
+    public function setNowPositionInfo($info)
     {
-        $nowPosition       = str_replace(array("\r\n","\r","\n"), '', fgets(STDIN));
+        $nowPosition       = str_replace(array("\r\n","\r","\n"), '', $info);
         $arrNowPosition    = explode(" ", $nowPosition);
 
         $this->nowAround    = $arrNowPosition["0"];
         $this->nowDirection = $arrNowPosition["1"];
     }
 
-    public function setPurposePositionInfo()
+    public function setPurposePositionInfo($info)
     {
-        $purposePosition    = str_replace(array("\r\n","\r","\n"), '', fgets(STDIN));
+        $purposePosition    = str_replace(array("\r\n","\r","\n"), '', $info);
         $arrPurposePosition = explode(" ", $purposePosition);
 
         $this->purposeAround    = $arrPurposePosition[0];
         $this->purposeDirection = $arrPurposePosition[1];
     }
 
-    public function calculationShortestDistance()
+    public function calculationShortestDistance() : float
     {
         $checkDirection   = $this->nowDirection.$this->purposeDirection;
         $oneLineDirection = array("NS", "SN", "WE", "EW", "NN", "SS", "WW", "EE");
@@ -57,16 +56,18 @@ class B046{
                 $this->distance = M_PI * 100 * $this->purposeAround / 2;
             }
         }
+
+        return $this->distance;
     }
 
-    public function display()
+    public function display() : float
     {
-        echo $this->distance;
+        return $this->distance;
     }
 }
 
-$B046 = new B046;
-$B046->setNowPositionInfo();
-$B046->setPurposePositionInfo();
+$B046 = new B046(fgets(STDIN));
+$B046->setNowPositionInfo(fgets(STDIN));
+$B046->setPurposePositionInfo(fgets(STDIN));
 $B046->calculationShortestDistance();
-$B046->display();
+echo $B046->display();
