@@ -1,7 +1,6 @@
 <?php
-
-class B012{
-
+class B012
+{
     private array $creditCards;
 
     public function setCredits(string $info) : array
