@@ -1,11 +1,11 @@
 <?php
 class B050
 {
-    private $countOfTicket;
+    private int $countOfTicket;
 
-    private $code;
+    private string $code;
 
-    private $pattern;
+    private string $pattern;
 
     public function __construct($info_count, $info_code)
     {
