@@ -19,23 +19,27 @@ class B016
         $this->move_times = $arrInfo[2];
     }
 
-    public function setPlayerPosition(string $info)
+    public function setPlayerPosition(string $info) : array
     {
         $player_position    = str_replace(array("\r\n", "\r", "\n"), '', $info);
         $arrPlayer_position = explode(" ", $player_position);
 
         $this->player["X"] = $arrPlayer_position[0];
         $this->player["Y"] = $arrPlayer_position[1];
+
+        return $this->player;
     }
 
-    public function setMoveInfo(string $info)
+    public function setMoveInfo(string $info) : array
     {
         for ($times = 1; $times <= $this->move_times; $times++) {
             $this->move_info[] = str_replace(array("\r\n", "\r", "\n"), '', $info);
         }
+
+        return $this->move_info;
     }
 
-    public function getFinalPosition()
+    public function getFinalPosition() : string
     {
         foreach ($this->move_info as $time => $move_info) {
             $arrMoveInfo = explode(" ", $move_info);
@@ -43,6 +47,8 @@ class B016
             $step        = $arrMoveInfo[1];
             $this->move($direction, $step, $this->player["X"], $this->player["Y"], $this->board["W"], $this->board["H"]);
         }
+
+        return $this->display();
     }
 
     public function move(string $direction, int $step, int & $X, int & $Y, int $W, int $H)
@@ -83,14 +89,13 @@ class B016
         }
     }
 
-    public function display()
+    public function display() : string
     {
-        echo $this->player["X"] . " " . $this->player["Y"];
+        return $this->player["X"] . " " . $this->player["Y"];
     }
 }
 
 $B016 = new B016(trim(fgets(STDIN)));
 $B016->setPlayerPosition(trim(fgets(STDIN)));
 $B016->setMoveInfo(trim(fgets(STDIN)));
-$B016->getFinalPosition();
-$B016->display();
+echo $B016->getFinalPosition();
