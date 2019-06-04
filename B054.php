@@ -1,44 +1,45 @@
 <?php
+class B054
+{
+    private string $code_Pa;
 
-class B054{
+    private array $rule_PaToDecimal5;
 
-    protected $code_Pa;
+    private array $rule_Decimal5ToPa;
 
-    protected $rule_PaToDecimal5;
+    private string $code_first;
 
-    protected $rule_Decimal5ToPa;
+    private string $code_second;
 
-    protected $code_first;
+    private string $result;
 
-    protected $code_second;
-
-    protected $result;
-
-    public function __construct()
+    public function __construct($info)
     {
-        $this->code_Pa = str_replace(array("\r\n","\r","\n"), '', fgets(STDIN));
+        $this->code_Pa = str_replace(array("\r\n","\r","\n"), '', $info);
         $arrCode = explode(" ", $this->code_Pa);
 
         $this->code_first  = $arrCode[0];
         $this->code_second = $arrCode[1];
     }
 
-    public function setRule($rule)
+    public function setRule(array $rule)
     {
         $this->rule_PaToDecimal5 = $rule;
         $this->rule_Decimal5ToPa = array_flip($rule);
     }
 
-    public function changeStart()
+    public function changeStart() : string
     {
         $this->code_first  = $this->changeBetweenPaAndDecimal5($this->code_first, $this->rule_PaToDecimal5);
         $this->code_second = $this->changeBetweenPaAndDecimal5($this->code_second, $this->rule_PaToDecimal5);
 
         $sumDecimal5 = $this->getSumDecimal5();
         $this->result = $this->changeBetweenPaAndDecimal5($sumDecimal5, $this->rule_Decimal5ToPa);
+
+        return $this->result;
     }
 
-    public function changeBetweenPaAndDecimal5($target, $rule)
+    public function changeBetweenPaAndDecimal5(string $target, array $rule) : string
     {
         $result  = "";
         $arrCode = str_split($target, 1);
@@ -50,12 +51,12 @@ class B054{
         return $result;
     }
 
-    public function display()
+    public function display() : string
     {
-        echo $this->result;
+        return $this->result;
     }
 
-    public function getSumDecimal5()
+    public function getSumDecimal5() : string
     {
         $sumDecimal10 = (int)base_convert($this->code_first, 5, 10) + (int)base_convert($this->code_second, 5, 10);
         $sumDecimal5  = base_convert($sumDecimal10, 10, 5);
@@ -63,7 +64,7 @@ class B054{
     }
 }
 
-$B054 = new B054;
+$B054 = new B054(fgets(STDIN));
 $B054->setRule(
   [
       "A" => 0,
@@ -74,4 +75,4 @@ $B054->setRule(
   ]
 );
 $B054->changeStart();
-$B054->display();
+echo $B054->display();
