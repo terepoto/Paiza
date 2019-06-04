@@ -13,20 +13,13 @@ class StrongestMeans
     private function countCard() : void
     {
         foreach ($this->cards as $card) {
-            /*switch ($card) {
-                case "*":
-                    $this->countOfCard = $this->plusAllKindCardOne($this->cards, $this->countOfCard);
-                    break;
-                default:
-                    $this->countOfCard[$card] = empty($this->countOfCard[$card]) ? 1 : $this->countOfCard[$card] + 1;
-                    break;
-            }*/
 
             if ($card == "*") {
                 $this->countOfCard = $this->plusAllKindCardOne($this->cards, $this->countOfCard);
-            } else {
-                $this->countOfCard[$card] = empty($this->countOfCard[$card]) ? 1 : $this->countOfCard[$card] + 1;
+                continue;
             }
+            $this->countOfCard[$card] = empty($this->countOfCard[$card]) ? 1 : $this->countOfCard[$card] + 1;
+
         }
     }
 
