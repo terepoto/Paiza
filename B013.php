@@ -2,23 +2,23 @@
 
 class B013{
 
-    protected $timeToStation;
+    private int $timeToStation;
 
-    protected $timeTravel;
+    private int $timeTravel;
 
-    protected $timeToFactory;
+    private int $timeToFactory;
 
-    protected $timeOfLate;
+    private int $timeOfLate;
 
-    protected $lastTimeByBus;
+    private int $lastTimeByBus;
 
-    protected $buses;
+    private array $buses;
 
-    protected $latestTimeFromHome;
+    private int $latestTimeFromHome;
 
-    public function __construct()
+    public function __construct(string $info)
     {
-        $info = str_replace(array("\r\n","\r","\n"), '', fgets(STDIN));
+        $info = str_replace(array("\r\n","\r","\n"), '', $info);
         $arrInfo = explode(" ", $info);
 
         $this->timeToStation = $arrInfo[0];
@@ -26,28 +26,30 @@ class B013{
         $this->timeToFactory = $arrInfo[2];
     }
 
-    public function setTimeOfLate($hour, $minute)
+    public function setTimeOfLate(int $hour, int $minute) : int
     {
-        $this->timeOfLate = $hour * 60 + $minute;
+        return $this->timeOfLate = $hour * 60 + $minute;
     }
 
-    public function setLastTimeByBus()
+    public function setLastTimeByBus() : int
     {
-        $this->lastTimeByBus = $this->timeOfLate - ( $this->timeTravel + $this->timeToFactory);
+        return $this->lastTimeByBus = $this->timeOfLate - ( $this->timeTravel + $this->timeToFactory);
     }
 
-    public function setBusInfo()
+    public function setBusInfo(string $info) : array
     {
-        $countOfBus = str_replace(array("\r\n","\r","\n"), '', fgets(STDIN));
+        $countOfBus = str_replace(array("\r\n","\r","\n"), '', $info);
 
         for ($count = 1; $count <= $countOfBus; $count++) {
             $departureTime    = str_replace(array("\r\n","\r","\n"), '', fgets(STDIN));
             $arrDepartureTime = explode(" ", $departureTime);
             $this->buses[]    = $arrDepartureTime[0] * 60 + $arrDepartureTime[1];
         }
+
+        return $this->buses;
     }
 
-    public function getTimeOutHome()
+    public function getTimeOutHome() : int
     {
         $time = 0;
         foreach ($this->buses as $busNumber => $minute) {
@@ -63,18 +65,18 @@ class B013{
             }
         }
 
-        $this->latestTimeFromHome = $time - $this->timeToStation;
+        return $this->latestTimeFromHome = $time - $this->timeToStation;
     }
 
-    public function display()
+    public function display() : string
     {
-        echo sprintf ("%02d", floor($this->latestTimeFromHome / 60 ) ). ":" . sprintf ("%02d", $this->latestTimeFromHome % 60);
+        return sprintf ("%02d", floor($this->latestTimeFromHome / 60 ) ). ":" . sprintf ("%02d", $this->latestTimeFromHome % 60);
     }
 }
 
-$B013 = new B013;
+$B013 = new B013(fgets(STDIN));
 $B013->setTimeOfLate(8, 59);
 $B013->setLastTimeByBus();
-$B013->setBusInfo();
+$B013->setBusInfo(fgets(STDIN));
 $B013->getTimeOutHome();
-$B013->display();
+echo $B013->display();
