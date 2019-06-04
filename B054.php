@@ -13,7 +13,7 @@ class B054
 
     private string $result;
 
-    public function __construct($info)
+    public function __construct(string $info)
     {
         $this->code_Pa = str_replace(array("\r\n","\r","\n"), '', $info);
         $arrCode = explode(" ", $this->code_Pa);
