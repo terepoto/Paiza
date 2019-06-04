@@ -7,9 +7,9 @@ class B011
 
     private int $backNumber;
 
-    public function __construct()
+    public function __construct($info)
     {
-        $info = str_replace(array("\r\n","\r","\n"), '', fgets(STDIN));
+        $info = str_replace(array("\r\n","\r","\n"), '', $info);
         $arrInfo = explode(" ", $info);
 
         $this->capacityOfPocket = $arrInfo[0];
@@ -51,6 +51,6 @@ class B011
     }
 }
 
-$B011 = new B011;
+$B011 = new B011(fgets(STDIN));
 $B011->getBackNumber();
 echo $B011->display();
