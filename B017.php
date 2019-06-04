@@ -3,23 +3,12 @@ class StrongestMeans
 {
     private array $cards;
 
-    private array $countOfCard = array();
+    private array $countOfCard;
 
     public function __construct(array $cards)
     {
-        $this->cards = $cards;
-    }
-
-    private function countCard() : void
-    {
-        foreach ($this->cards as $card) {
-
-            if ($card == "*") {
-                $this->plusAllKindCardOne();
-                continue;
-            }
-            $this->plusSpecifiedCardOne($card);
-        }
+        $this->cards       = $cards;
+        $this->countOfCard = array();
     }
 
     public function getMeans() : string
@@ -44,6 +33,19 @@ class StrongestMeans
         return $means;
     }
 
+    private function countCard() : void
+    {
+        foreach ($this->cards as $card) {
+
+            if ($card == "*") {
+                $this->plusAllKindCardOne();
+                continue;
+            }
+            $this->plusSpecifiedCardOne($card);
+
+        }
+    }
+
     private function plusAllKindCardOne() : void
     {
         $cards = array_unique($this->cards);
@@ -61,7 +63,7 @@ class StrongestMeans
     }
 }
 
-$cards = str_replace(array("\r\n","\r","\n"), '', fgets(STDIN));
+$cards = str_replace(array(PHP_EOL), '', fgets(STDIN));
 $cards = str_split($cards, 1);
 
 $strongMeans = new StrongestMeans($cards);
