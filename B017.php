@@ -1,13 +1,13 @@
 <?php
 class B017
 {
-    protected $cards;
+    private array $cards;
 
-    protected $countOfCard;
+    private array $countOfCard = array();
 
-    public function __construct()
+    public function __construct(string $info)
     {
-        $cardGroup = str_replace(array("\r\n","\r","\n"), '', fgets(STDIN));
+        $cardGroup = str_replace(array("\r\n","\r","\n"), '', $info);
         $this->cards = str_split($cardGroup, 1);
     }
 
@@ -19,7 +19,7 @@ class B017
                     $this->plusAllKindCardOne($this->cards, $this->countOfCard);
                     break;
                 default:
-                    $this->countOfCard[$card] = !isset($this->countOfCard[$card]) ? 1 : $this->countOfCard[$card] + 1;
+                    $this->countOfCard[$card] = empty($this->countOfCard[$card]) ? 1 : $this->countOfCard[$card] + 1;
                     break;
             }
         }
@@ -27,25 +27,25 @@ class B017
 
     public function getMeans()
     {
-        $Means = "";
+        $means = "";
         switch (max($this->countOfCard)) {
             case "1":
-                $Means = "NoPair";
+                $means = "NoPair";
                 break;
             case "2":
-                $Means = count($this->countOfCard) == 2 ? "TwoPair" : "OnePair";
+                $means = count($this->countOfCard) == 2 ? "TwoPair" : "OnePair";
                 break;
             case "3":
-                $Means = "ThreeCard";
+                $means = "ThreeCard";
                 break;
             case "4":
-                $Means = "FourCard";
+                $means = "FourCard";
                 break;
         }
-        echo $Means;
+        echo $means;
     }
 
-    public function plusAllKindCardOne($cards, & $countOfCard)
+    public function plusAllKindCardOne(array $cards, array & $countOfCard)
     {
         $cards = array_unique($cards);
         foreach ($cards as $number => $card) {
@@ -56,6 +56,6 @@ class B017
     }
 }
 
-$B017 = new B017;
+$B017 = new B017(fgets(STDIN));
 $B017->countCard();
 $B017->getMeans();
