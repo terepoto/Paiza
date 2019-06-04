@@ -1,17 +1,16 @@
 <?php
-class B017
+class StrongestMeans
 {
     private array $cards;
 
     private array $countOfCard = array();
 
-    public function __construct(string $info)
+    public function __construct(array $cards)
     {
-        $cardGroup = str_replace(array("\r\n","\r","\n"), '', $info);
-        $this->cards = str_split($cardGroup, 1);
+        $this->cards = $cards;
     }
 
-    public function countCard() : array
+    private function countCard() : void
     {
         foreach ($this->cards as $number => $card) {
             switch ($card) {
@@ -23,11 +22,12 @@ class B017
                     break;
             }
         }
-        return $this->countOfCard;
     }
 
     public function getMeans() : string
     {
+        $this->countCard();
+
         $means = "";
         switch (max($this->countOfCard)) {
             case "1":
@@ -46,13 +46,13 @@ class B017
         return $means;
     }
 
-    public function plusAllKindCardOne(array $cards, array $countOfCard) : array
+    private function plusAllKindCardOne(array $cards, array $countOfCard) : array
     {
         $cards = array_unique($cards);
 
         foreach ($cards as $number => $card) {
             if ($card != "*") {
-                $countOfCard[$card] = !isset($countOfCard[$card]) ? 1 : $countOfCard[$card] + 1;
+                $countOfCard[$card] = empty($countOfCard[$card]) ? 1 : $countOfCard[$card] + 1;
             }
         }
 
@@ -60,6 +60,7 @@ class B017
     }
 }
 
-$B017 = new B017(fgets(STDIN));
-$B017->countCard();
-echo $B017->getMeans();
+$cards = str_replace(array("\r\n","\r","\n"), '', fgets(STDIN));
+$cards = str_split($cards, 1);
+$strongMeans = new StrongestMeans($cards);
+echo $strongMeans->getMeans();
