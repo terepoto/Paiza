@@ -4,7 +4,7 @@ class B012{
 
     private array $creditCards;
 
-    public function setCredits(string $info)
+    public function setCredits(string $info) : array
     {
         $countOfCredits = str_replace(array("\r\n","\r","\n"), '', $info);
 
@@ -12,6 +12,8 @@ class B012{
             $creditCard = str_replace(array("\r\n","\r","\n"), '', fgets(STDIN));
             $this->creditCards[] = $creditCard;
         }
+
+        return $this->creditCards;
     }
 
     public function getX() : string
