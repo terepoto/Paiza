@@ -13,7 +13,7 @@ class ResetImage
         $this->percentage = $percentage;
     }
 
-    private function resetImage() : void
+    public function resetImage() : void
     {
         $purposeLength = $this->lengthOfSide / $this->percentage;
         for ($i = 1; $i <= $purposeLength; $i++) {
@@ -31,12 +31,11 @@ class ResetImage
                 $this->newImage[] = floor(array_sum($block[$group]) / $this->percentage / $this->percentage);
             }
         }
+        $this->display();
     }
 
-    public function display() : string
+    private function display() : void
     {
-        $this->resetImage();
-
         $message       = "";
         $lineCharge    = 1;
         $purposeLength = $this->lengthOfSide / $this->percentage;
@@ -53,7 +52,7 @@ class ResetImage
             }
         }
 
-        return $message;
+        echo $message;
     }
 }
 
@@ -61,4 +60,4 @@ $info = str_replace(array("\r\n","\r","\n"), '', trim(fgets(STDIN)));
 $arrInfo = explode(" ", $info);
 
 $resetImage = new ResetImage($arrInfo[0], $arrInfo[1]);
-echo $resetImage->display();
+echo $resetImage->resetImage();
