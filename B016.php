@@ -1,17 +1,17 @@
 <?php
 class B016
 {
-    protected $board;
+    private array $board;
 
-    protected $move_times;
+    private int $move_times;
 
-    protected $player;
+    private int $move_info;
 
-    protected $move_info;
+    private array $player;
 
-    public function __construct()
+    public function __construct(string $info)
     {
-        $info    = str_replace(array("\r\n", "\r", "\n"), '', trim(fgets(STDIN)));
+        $info    = str_replace(array("\r\n", "\r", "\n"), '', $info);
         $arrInfo = explode(" ", $info);
 
         $this->board["W"] = $arrInfo[0];
@@ -19,19 +19,19 @@ class B016
         $this->move_times = $arrInfo[2];
     }
 
-    public function setPlayerPosition()
+    public function setPlayerPosition(string $info)
     {
-        $player_position    = str_replace(array("\r\n", "\r", "\n"), '', trim(fgets(STDIN)));
+        $player_position    = str_replace(array("\r\n", "\r", "\n"), '', $info);
         $arrPlayer_position = explode(" ", $player_position);
 
         $this->player["X"] = $arrPlayer_position[0];
         $this->player["Y"] = $arrPlayer_position[1];
     }
 
-    public function setMoveInfo()
+    public function setMoveInfo(string $info)
     {
         for ($times = 1; $times <= $this->move_times; $times++) {
-            $this->move_info[] = str_replace(array("\r\n", "\r", "\n"), '', trim(fgets(STDIN)));
+            $this->move_info[] = str_replace(array("\r\n", "\r", "\n"), '', $info);
         }
     }
 
@@ -45,7 +45,7 @@ class B016
         }
     }
 
-    public function move($direction, $step, & $X, & $Y, $W, $H)
+    public function move(string $direction, int $step, int & $X, int & $Y, int $W, int $H)
     {
         switch ($direction) {
             case "U":
@@ -89,8 +89,8 @@ class B016
     }
 }
 
-$B016 = new B016;
-$B016->setPlayerPosition();
-$B016->setMoveInfo();
+$B016 = new B016(trim(fgets(STDIN)));
+$B016->setPlayerPosition(trim(fgets(STDIN)));
+$B016->setMoveInfo(trim(fgets(STDIN)));
 $B016->getFinalPosition();
 $B016->display();
