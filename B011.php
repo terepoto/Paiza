@@ -1,12 +1,11 @@
 <?php
+class B011
+{
+    private int $capacityOfPocket;
 
-class B011{
+    private int $number;
 
-    protected $capacityOfPocket;
-
-    protected $number;
-
-    protected $backNumber;
+    private int $backNumber;
 
     public function __construct()
     {
@@ -17,7 +16,7 @@ class B011{
         $this->number = $arrInfo[1];
     }
 
-    public function getBackNumber()
+    public function getBackNumber() : int
     {
         $position = $this->number % $this->capacityOfPocket;
 
@@ -35,21 +34,23 @@ class B011{
                 $this->backNumber = $this->number - 2 * ($position - 1) - 1;
                 break;
         }
+
+        return $this->backNumber;
     }
 
-    public function getFrontOrBack($capacityOfPocket, $number)
+    public function getFrontOrBack(int $capacityOfPocket, int $number) : string
     {
         $pocketNum = ceil ( $number / $capacityOfPocket );
 
         return $pocketNum % 2 == 0 ? "-" : "+";
     }
 
-    public function display()
+    public function display() : int
     {
-        echo $this->backNumber;
+        return $this->backNumber;
     }
 }
 
 $B011 = new B011;
 $B011->getBackNumber();
-$B011->display();
+echo $B011->display();
