@@ -15,11 +15,10 @@ class StrongestMeans
         foreach ($this->cards as $card) {
 
             if ($card == "*") {
-                $this->countOfCard = $this->plusAllKindCardOne($this->cards, $this->countOfCard);
+                $this->plusAllKindCardOne();
                 continue;
             }
-            $this->countOfCard[$card] = empty($this->countOfCard[$card]) ? 1 : $this->countOfCard[$card] + 1;
-
+            $this->plusSpecifiedCardOne($card);
         }
     }
 
@@ -45,21 +44,25 @@ class StrongestMeans
         return $means;
     }
 
-    private function plusAllKindCardOne(array $cards, array $countOfCard) : array
+    private function plusAllKindCardOne() : void
     {
-        $cards = array_unique($cards);
+        $cards = array_unique($this->cards);
 
-        foreach ($cards as $number => $card) {
+        foreach ($cards as $card) {
             if ($card != "*") {
-                $countOfCard[$card] = empty($countOfCard[$card]) ? 1 : $countOfCard[$card] + 1;
+                $this->plusSpecifiedCardOne($card);
             }
         }
+    }
 
-        return $countOfCard;
+    private function plusSpecifiedCardOne($card) : void
+    {
+        $this->countOfCard[$card] = empty($this->countOfCard[$card]) ? 1 : $this->countOfCard[$card] + 1;
     }
 }
 
 $cards = str_replace(array("\r\n","\r","\n"), '', fgets(STDIN));
 $cards = str_split($cards, 1);
+
 $strongMeans = new StrongestMeans($cards);
 echo $strongMeans->getMeans();
