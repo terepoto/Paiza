@@ -38,7 +38,7 @@ class DepartureTime
 
         $latestDepartureTimeFromHome = $latestDepartureTimeOfBus - $this->timeOfEachSection["homeToStation"];
 
-        echo sprintf ("%02d", floor($latestDepartureTimeFromHome / 60 ) ). ":" . sprintf ("%02d", $latestDepartureTimeFromHome % 60);
+        echo sprintf ("%02d", floor($latestDepartureTimeFromHome / 60 ) ) . ":" . sprintf ("%02d", $latestDepartureTimeFromHome % 60);
     }
 }
 
