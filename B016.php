@@ -1,101 +1,84 @@
 <?php
-class B016
+class RpgGame
 {
-    private array $board;
+    private $board;
 
-    private int $move_times;
-
-    private int $move_info;
-
-    private array $player;
-
-    public function __construct(string $info)
+    public function __construct(array $board)
     {
-        $info    = str_replace(array("\r\n", "\r", "\n"), '', $info);
-        $arrInfo = explode(" ", $info);
-
-        $this->board["W"] = $arrInfo[0];
-        $this->board["H"] = $arrInfo[1];
-        $this->move_times = $arrInfo[2];
+        $this->board = $board;
     }
 
-    public function setPlayerPosition(string $info) : array
+    public function getAfterMovePosition(array $playerPosition, array $moveInfos) : void
     {
-        $player_position    = str_replace(array("\r\n", "\r", "\n"), '', $info);
-        $arrPlayer_position = explode(" ", $player_position);
-
-        $this->player["X"] = $arrPlayer_position[0];
-        $this->player["Y"] = $arrPlayer_position[1];
-
-        return $this->player;
-    }
-
-    public function setMoveInfo(string $info) : array
-    {
-        for ($times = 1; $times <= $this->move_times; $times++) {
-            $this->move_info[] = str_replace(array("\r\n", "\r", "\n"), '', $info);
+        foreach ($moveInfos as $moveInfo) {
+            $this->move($moveInfo, $playerPosition);
         }
-
-        return $this->move_info;
+        echo $playerPosition["X"] . " " . $playerPosition["Y"];
     }
 
-    public function getFinalPosition() : string
+    private function move(array $moveInfo, array & $playerPosition) : void
     {
-        foreach ($this->move_info as $time => $move_info) {
-            $arrMoveInfo = explode(" ", $move_info);
-            $direction   = $arrMoveInfo[0];
-            $step        = $arrMoveInfo[1];
-            $this->move($direction, $step, $this->player["X"], $this->player["Y"], $this->board["W"], $this->board["H"]);
-        }
+        $direction = $moveInfo[0];
+        $step      = $moveInfo[1];
 
-        return $this->display();
-    }
+        $heightOfBoard = $this->board["H"];
+        $widthOfBoard  = $this->board["W"];
 
-    public function move(string $direction, int $step, int & $X, int & $Y, int $W, int $H)
-    {
         switch ($direction) {
             case "U":
-                $step = $step % $H;
-                if ($Y + $step > $H - 1) {
-                    $Y = $step - ( $H - $Y );
+                $relativeStep = $step % $heightOfBoard;
+                if ($playerPosition["Y"] + $relativeStep > $heightOfBoard - 1) {
+                    $playerPosition["Y"] = $relativeStep - ( $heightOfBoard - $playerPosition["Y"] );
                 } else {
-                    $Y += $step;
+                    $playerPosition["Y"] += $relativeStep;
                 }
                 break;
             case "D":
-                $step = $step % $H;
-                if ($Y - $step < 0) {
-                    $Y = $H - ( $step - $Y );
+                $relativeStep = $step % $heightOfBoard;
+                if ($playerPosition["Y"] - $relativeStep < 0) {
+                    $playerPosition["Y"] = $heightOfBoard - ( $relativeStep - $playerPosition["Y"] );
                 } else {
-                    $Y -= $step;
+                    $playerPosition["Y"] -= $relativeStep;
                 }
                 break;
             case "L":
-                $step = $step % $W;
-                if ($X - $step < 0) {
-                    $X = $W - ( $step - $X );
+                $relativeStep = $step % $widthOfBoard;
+                if ($playerPosition["X"] - $relativeStep < 0) {
+                    $playerPosition["X"] = $widthOfBoard - ( $relativeStep - $playerPosition["X"] );
                 } else {
-                    $X -= $step;
+                    $playerPosition["X"] -= $relativeStep;
                 }
                 break;
             case "R":
-                $step = $step % $W;
-                if ($X + $step > $W - 1) {
-                    $X = $step - ( $W - $X );
+                $relativeStep = $step % $widthOfBoard;
+                if ($playerPosition["X"] + $relativeStep > $widthOfBoard - 1) {
+                    $playerPosition["X"] = $relativeStep - ( $widthOfBoard - $playerPosition["X"] );
                 } else {
-                    $X += $step;
+                    $playerPosition["X"] += $relativeStep;
                 }
                 break;
         }
     }
-
-    public function display() : string
-    {
-        return $this->player["X"] . " " . $this->player["Y"];
-    }
 }
 
-$B016 = new B016(trim(fgets(STDIN)));
-$B016->setPlayerPosition(trim(fgets(STDIN)));
-$B016->setMoveInfo(trim(fgets(STDIN)));
-echo $B016->getFinalPosition();
+$board  = array();
+$player = array();
+
+$info    = str_replace(array("\r\n", "\r", "\n"), '', trim(fgets(STDIN)));
+$arrInfo = explode(" ", $info);
+
+$board["W"] = $arrInfo[0];
+$board["H"] = $arrInfo[1];
+$move_times = $arrInfo[2];
+
+$arrPlayInfo  = explode(" ", str_replace(array("\r\n", "\r", "\n"), '', trim(fgets(STDIN))));
+$playerPosition["X"] = $arrPlayInfo[0];
+$playerPosition["Y"] = $arrPlayInfo[1];
+
+$moveInfos = array();
+for ($num = 1; $num <= $move_times; $num++) {
+    $moveInfos[] = explode(" ", str_replace(array("\r\n", "\r", "\n"), '', trim(fgets(STDIN))));
+}
+
+$rpgGame = new RpgGame($board);
+$rpgGame->getAfterMovePosition($playerPosition, $moveInfos);
