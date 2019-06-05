@@ -7,7 +7,7 @@ class BackNumber
         if ($relativePosition == 0) {
             $relativePosition = $capacityOfPage;
         }
-        if ($this->checkIfIsInFront($number, $capacityOfPage)) {
+        if ($this->checkIfIsInFront($capacityOfPage, $number)) {
             $backNumber = $number + 2 * ($capacityOfPage - $relativePosition) + 1;
         } else {
             $backNumber = $number - 2 * ($relativePosition - 1) - 1;
@@ -15,7 +15,7 @@ class BackNumber
         echo $backNumber;
     }
 
-    private function checkIfIsInFront($number, $capacityOfPage) : bool
+    private function checkIfIsInFront($capacityOfPage, $number) : bool
     {
         $page = ceil ( $number / $capacityOfPage );
         if ($page % 2 == 0) {
