@@ -1,9 +1,9 @@
 <?php
 class ResetImage
 {
-    private  $image;
+    private  array $image;
 
-    private  $newImage;
+    private  array $newImage;
 
     public function __construct(array $image)
     {
