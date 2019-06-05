@@ -1,82 +1,61 @@
 <?php
-
-class B013{
-
-    private int $timeToStation;
-
-    private int $timeTravel;
-
-    private int $timeToFactory;
-
-    private int $timeOfLate;
-
-    private int $lastTimeByBus;
-
+class DepartureTime
+{
     private array $buses;
 
-    private int $latestTimeFromHome;
+    private array $timeOfEachSection;
 
-    public function __construct(string $info)
+    private int $latestTimeAtCompany;
+
+    public function __construct(array $buses, array $timeOfEachSection)
     {
-        $info = str_replace(array("\r\n","\r","\n"), '', $info);
-        $arrInfo = explode(" ", $info);
-
-        $this->timeToStation = $arrInfo[0];
-        $this->timeTravel    = $arrInfo[1];
-        $this->timeToFactory = $arrInfo[2];
+        $this->buses               = $buses;
+        $this->timeOfEachSection   = $timeOfEachSection;
+        $this->latestTimeAtCompany = 8 * 60 + 59;
     }
 
-    public function setTimeOfLate(int $hour, int $minute) : int
+    public function getLatestDepartureTime() : void
     {
-        return $this->timeOfLate = $hour * 60 + $minute;
-    }
+        $latestTimeByBus = $this->latestTimeAtCompany - $this->timeOfEachSection["stationToCompany"] - $this->timeOfEachSection["travelTime"];
 
-    public function setLastTimeByBus() : int
-    {
-        return $this->lastTimeByBus = $this->timeOfLate - ( $this->timeTravel + $this->timeToFactory);
-    }
+        $latestDepartureTimeOfBus = 0;
 
-    public function setBusInfo(string $info) : array
-    {
-        $countOfBus = str_replace(array("\r\n","\r","\n"), '', $info);
+        foreach ($this->buses as $busNumber => $departureTimeOfBus) {
 
-        for ($count = 1; $count <= $countOfBus; $count++) {
-            $departureTime    = str_replace(array("\r\n","\r","\n"), '', fgets(STDIN));
-            $arrDepartureTime = explode(" ", $departureTime);
-            $this->buses[]    = $arrDepartureTime[0] * 60 + $arrDepartureTime[1];
-        }
+            if ($departureTimeOfBus <= $latestTimeByBus) {
+                if ($busNumber == count($this->buses) - 1) {
+                    $latestDepartureTimeOfBus = $departureTimeOfBus;
+                    break;
+                }
 
-        return $this->buses;
-    }
-
-    public function getTimeOutHome() : int
-    {
-        $time = 0;
-        foreach ($this->buses as $busNumber => $minute) {
-            //終電なら
-            if ($busNumber == count($this->buses) -1) {
-                $time = $minute;
-                break;
+                if ($latestTimeByBus < $this->buses[$busNumber + 1]) {
+                    $latestDepartureTimeOfBus = $departureTimeOfBus;
+                    break;
+                }
             }
 
-            if ($minute <= $this->lastTimeByBus && $this->lastTimeByBus < $this->buses[$busNumber + 1]) {
-                $time = $minute;
-                break;
-            }
         }
 
-        return $this->latestTimeFromHome = $time - $this->timeToStation;
-    }
+        $latestDepartureTimeFromHome = $latestDepartureTimeOfBus - $this->timeOfEachSection["homeToStation"];
 
-    public function display() : string
-    {
-        return sprintf ("%02d", floor($this->latestTimeFromHome / 60 ) ). ":" . sprintf ("%02d", $this->latestTimeFromHome % 60);
+        echo sprintf ("%02d", floor($latestDepartureTimeFromHome / 60 ) ). ":" . sprintf ("%02d", $latestDepartureTimeFromHome % 60);
     }
 }
 
-$B013 = new B013(fgets(STDIN));
-$B013->setTimeOfLate(8, 59);
-$B013->setLastTimeByBus();
-$B013->setBusInfo(fgets(STDIN));
-$B013->getTimeOutHome();
-echo $B013->display();
+$info = str_replace(array("\r\n","\r","\n"), '', fgets(STDIN));
+$arrInfo = explode(" ", $info);
+
+$timeOfEachSection["homeToStation"]    = $arrInfo[0];
+$timeOfEachSection["travelTime"]       = $arrInfo[1];
+$timeOfEachSection["stationToCompany"] = $arrInfo[2];
+
+$buses = array();
+$countOfBus = str_replace(array("\r\n","\r","\n"), '', fgets(STDIN));
+for ($count = 1; $count <= $countOfBus; $count++) {
+    $departureTime    = str_replace(array("\r\n","\r","\n"), '', fgets(STDIN));
+    $arrDepartureTime = explode(" ", $departureTime);
+    $buses[]    = $arrDepartureTime[0] * 60 + $arrDepartureTime[1];
+}
+
+$departureTime = new DepartureTime($buses, $timeOfEachSection);
+$departureTime->getLatestDepartureTime();
