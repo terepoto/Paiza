@@ -8,7 +8,7 @@ class FirstDigitOfCreditCard
         $this->creditCards = $creditCards;
     }
 
-    public function getXOfCredit() : void
+    public function getFirstDigitOfCreditCard() : void
     {
         foreach ($this->creditCards as $creditCard) {
             $odd  = 0;
@@ -54,4 +54,4 @@ for ($num = 1; $num <= $countOfCredits; $num++) {
 }
 
 $FirstDigitOfCreditCard = new FirstDigitOfCreditCard($creditCards);
-$FirstDigitOfCreditCard->getXOfCredit();
+$FirstDigitOfCreditCard->getFirstDigitOfCreditCard();
