@@ -1,7 +1,7 @@
 <?php
 class RpgGame
 {
-    private $board;
+    private array $board;
 
     public function __construct(array $board)
     {
