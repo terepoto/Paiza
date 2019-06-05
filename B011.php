@@ -1,56 +1,35 @@
 <?php
-class B011
+class BackNumber
 {
-    private int $capacityOfPocket;
-
-    private int $number;
-
-    private int $backNumber;
-
-    public function __construct($info)
+    public function getBackNumber($capacityOfPage, $number) : void
     {
-        $info = str_replace(array("\r\n","\r","\n"), '', $info);
-        $arrInfo = explode(" ", $info);
-
-        $this->capacityOfPocket = $arrInfo[0];
-        $this->number = $arrInfo[1];
-    }
-
-    public function getBackNumber() : int
-    {
-        $position = $this->number % $this->capacityOfPocket;
-
-        if ($position == 0 ) {
-            $position = $this->capacityOfPocket;
+        $relativePosition = $number % $capacityOfPage;
+        if ($relativePosition == 0) {
+            $relativePosition = $capacityOfPage;
         }
-
-        $sideOfNumber = $this->getFrontOrBack($this->capacityOfPocket, $this->number);
-
-        switch ($sideOfNumber) {
-            case "+":
-                $this->backNumber = $this->number + 2 * ($this->capacityOfPocket - $position) + 1;
-                break;
-            case "-":
-                $this->backNumber = $this->number - 2 * ($position - 1) - 1;
-                break;
+        if ($this->checkIfIsInFront($number, $capacityOfPage)) {
+            $backNumber = $number + 2 * ($capacityOfPage - $relativePosition) + 1;
+        } else {
+            $backNumber = $number - 2 * ($relativePosition - 1) - 1;
         }
-
-        return $this->backNumber;
+        echo $backNumber;
     }
 
-    public function getFrontOrBack(int $capacityOfPocket, int $number) : string
+    private function checkIfIsInFront($number, $capacityOfPage) : bool
     {
-        $pocketNum = ceil ( $number / $capacityOfPocket );
-
-        return $pocketNum % 2 == 0 ? "-" : "+";
-    }
-
-    public function display() : int
-    {
-        return $this->backNumber;
+        $page = ceil ( $number / $capacityOfPage );
+        if ($page % 2 == 0) {
+            return false;
+        }
+        return true;
     }
 }
 
-$B011 = new B011(fgets(STDIN));
-$B011->getBackNumber();
-echo $B011->display();
+$info = str_replace(array("\r\n","\r","\n"), '', fgets(STDIN));
+$arrInfo = explode(" ", $info);
+
+$capacityOfPage = $arrInfo[0];
+$number         = $arrInfo[1];
+
+$backNumber = new BackNumber();
+$backNumber->getBackNumber($capacityOfPage, $number);
