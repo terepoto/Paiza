@@ -1,68 +1,59 @@
 <?php
 class ResetImage
 {
-    private int $imageLength;
+    private  $image;
 
-    private int $percentage;
+    private  $newImage;
 
-    private array $newImage;
-
-    public function __construct(string $imageLength, string $percentage)
+    public function __construct(array $image)
     {
-        $this->imageLength = $imageLength;
-        $this->percentage = $percentage;
+        $this->image = $image;
     }
 
-    public function resetImage() : void
+    public function resetImage(int $percentage) : void
     {
-        $purposeImageLength = $this->imageLength / $this->percentage;
-        for ($i = 1; $i <= $purposeImageLength; $i++) {
-            $block  = array();
+        $block = array();
 
-            for ($line = 1; $line <= $this->percentage; $line++) {
-                $arrPixels = $this->getPixels();
-                foreach ($arrPixels as $number => $value) {
-                    $block[$number / $this->percentage][] = $value;
-                }
-            }
-
-            for ($group = 0; $group < $purposeImageLength; $group++) {
-                $this->newImage[] = floor(array_sum($block[$group]) / $this->percentage / $this->percentage);
+        foreach ($this->image as $lineNumber => $lineInfo) {
+            foreach ($lineInfo as $num => $pixels) {
+                $block[$lineNumber / $percentage][$num / $percentage] += $pixels;
             }
         }
+
+        foreach ($block as $lineNumber => $lineInfo) {
+            foreach ($lineInfo as $num => $pixels) {
+                $this->newImage[$lineNumber][$num] = floor($pixels / $percentage / $percentage);
+            }
+        }
+
         $this->display();
     }
 
-    private function getPixels() : array
+    public function display() :void
     {
-        $pixels = str_replace(array("\r\n","\r","\n"), '', trim(fgets(STDIN)));
-        return $arrPixels  = explode(" ", $pixels);
-    }
-
-    private function display() : void
-    {
-        $message       = "";
-        $lineCharge    = 1;
-        $purposeImageLength = $this->imageLength / $this->percentage;
-
-        foreach ($this->newImage as $group => $val) {
-            $message .= $val;
-
-            if ($lineCharge == $purposeImageLength) {
-                $lineCharge = 1;
-                $message .= PHP_EOL;
-            } else {
-                $lineCharge++;
-                $message .= " ";
+        foreach ($this->newImage as $lineNumber => $lineInfo) {
+            foreach ($lineInfo as $num => $pixels) {
+                echo $pixels;
+                if ($num == count($lineInfo) - 1) {
+                    continue;
+                }
+                echo " ";
             }
+            echo PHP_EOL;
         }
-
-        echo $message;
     }
 }
 
 $info = str_replace(array("\r\n","\r","\n"), '', trim(fgets(STDIN)));
 $arrInfo = explode(" ", $info);
 
-$resetImage = new ResetImage($arrInfo[0], $arrInfo[1]);
-$resetImage->resetImage();
+$lengthOfImage = $arrInfo[0];
+$percentage    = $arrInfo[1];
+
+$image = array();
+for ($num = 0; $num < $lengthOfImage; $num++) {
+    $image[] = explode(" ", str_replace(array("\r\n","\r","\n"), '', trim(fgets(STDIN))));
+}
+
+$resetImage = new ResetImage($image);
+$resetImage->resetImage($percentage);
