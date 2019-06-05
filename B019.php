@@ -10,7 +10,7 @@ class ResetImage
         $this->image = $image;
     }
 
-    public function resetImage(int $percentage) : void
+    public function reduce(int $percentage) : void
     {
         $block = array();
 
@@ -25,11 +25,9 @@ class ResetImage
                 $this->newImage[$lineNumber][$columnNum] = floor($pixel / pow($percentage, 2));
             }
         }
-
-        $this->display();
     }
 
-    private function display() :void
+    public function display() :void
     {
         foreach ($this->newImage as $lineNumber => $lineInfo) {
             foreach ($lineInfo as $columnNum => $pixel) {
@@ -56,4 +54,5 @@ for ($num = 0; $num < $lengthOfImage; $num++) {
 }
 
 $resetImage = new ResetImage($image);
-$resetImage->resetImage($percentage);
+$resetImage->reduce($percentage);
+$resetImage->display();
