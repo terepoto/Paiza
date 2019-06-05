@@ -15,26 +15,26 @@ class ResetImage
         $block = array();
 
         foreach ($this->image as $lineNumber => $lineInfo) {
-            foreach ($lineInfo as $num => $pixels) {
-                $block[$lineNumber / $percentage][$num / $percentage] += $pixels;
+            foreach ($lineInfo as $columnNum => $pixel) {
+                $block[$lineNumber / $percentage][$columnNum / $percentage] += $pixel;
             }
         }
 
         foreach ($block as $lineNumber => $lineInfo) {
-            foreach ($lineInfo as $num => $pixels) {
-                $this->newImage[$lineNumber][$num] = floor($pixels / $percentage / $percentage);
+            foreach ($lineInfo as $columnNum => $pixel) {
+                $this->newImage[$lineNumber][$columnNum] = floor($pixel / pow($percentage, 2));
             }
         }
 
         $this->display();
     }
 
-    public function display() :void
+    private function display() :void
     {
         foreach ($this->newImage as $lineNumber => $lineInfo) {
-            foreach ($lineInfo as $num => $pixels) {
-                echo $pixels;
-                if ($num == count($lineInfo) - 1) {
+            foreach ($lineInfo as $columnNum => $pixel) {
+                echo $pixel;
+                if ($columnNum == count($lineInfo) - 1) {
                     continue;
                 }
                 echo " ";
