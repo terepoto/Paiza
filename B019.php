@@ -1,5 +1,5 @@
 <?php
-class ResetImage
+class ReduceImage
 {
     private  array $image;
 
@@ -53,6 +53,6 @@ for ($num = 0; $num < $lengthOfImage; $num++) {
     $image[] = explode(" ", str_replace(array("\r\n","\r","\n"), '', trim(fgets(STDIN))));
 }
 
-$resetImage = new ResetImage($image);
-$resetImage->reduce($percentage);
-$resetImage->display();
+$reduceImage = new ReduceImage($image);
+$reduceImage->reduce($percentage);
+$reduceImage->display();
