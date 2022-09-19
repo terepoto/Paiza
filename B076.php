@@ -1,33 +1,36 @@
 <?php
-class BreadOrder{
-    
+
+class BreadOrder
+{
+
     private $kindOfBreads;
-    
+
     private $orderTimes;
-    
-    private $breads = [];
-    
-    private $orders = [];
-    
-    public function __construct($infos){
+
+    private array $breads = [];
+
+    public function __construct($infos)
+    {
         $infos = explode(' ', $infos);
         $this->kindOfBreads = $infos[0];
         $this->orderTimes = $infos[1];
     }
-    
-    public function setBreads() {
+
+    public function setBreads()
+    {
         for ($i = 1; $i <= $this->kindOfBreads; $i++) {
-            $breadInfo = explode(' ', str_replace(array("\r\n","\r","\n"), '', fgets(STDIN)));
+            $breadInfo = explode(' ', str_replace(array("\r\n", "\r", "\n"), '', fgets(STDIN)));
             $this->breads[$i] = [
                 'price' => $breadInfo[0],
                 'count' => $breadInfo[1]
             ];
         }
     }
-    
-    public function checkOrder() {
+
+    public function checkOrder()
+    {
         for ($i = 1; $i <= $this->orderTimes; $i++) {
-            $orderInfo = explode(' ', str_replace(array("\r\n","\r","\n"), '', fgets(STDIN)));
+            $orderInfo = explode(' ', str_replace(array("\r\n", "\r", "\n"), '', fgets(STDIN)));
             $orderType = $orderInfo[0];
             switch ($orderType) {
                 case 'bake':
@@ -37,7 +40,7 @@ class BreadOrder{
                         }
                         $this->breads[$key]['count'] += $count;
                     }
-                    
+
                     break;
                 case 'buy':
                     $price = 0;
@@ -57,9 +60,9 @@ class BreadOrder{
                         $this->breads[$key]['count'] -= $count;
                         $price += $this->breads[$key]['price'] * $count;
                     }
-                    
-                    echo $i == $orderTimes ? $price : $price. PHP_EOL;
-                    
+
+                    echo $i == $this->orderTimes ? $price : $price . PHP_EOL;
+
                     break;
             }
         }
@@ -67,7 +70,7 @@ class BreadOrder{
 
 }
 
-$info = str_replace(array("\r\n","\r","\n"), '', fgets(STDIN));
+$info = str_replace(array("\r\n", "\r", "\n"), '', fgets(STDIN));
 $BreadOrder = new BreadOrder($info);
 $BreadOrder->setBreads();
 $BreadOrder->checkOrder();
