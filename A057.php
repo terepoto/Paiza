@@ -26,7 +26,7 @@ class LongestSwipe
             for ($x = 0; $x < $this->line; $x++) {
                 $count = [];
                 $count['up'] = $this->checkAbleToSwipe($y, $x, 'up');
-                $count['dowm'] = $this->checkAbleToSwipe($y, $x, 'down');
+                $count['down'] = $this->checkAbleToSwipe($y, $x, 'down');
                 $count['left'] = $this->checkAbleToSwipe($y, $x, 'left');
                 $count['right'] = $this->checkAbleToSwipe($y, $x, 'right');
                 $count['diagonalRightUp'] = $this->checkAbleToSwipe($y, $x, 'diagonalRightUp');
